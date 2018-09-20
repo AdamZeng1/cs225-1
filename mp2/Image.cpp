@@ -3,6 +3,11 @@
 
 using namespace cs225;
 
+Image::Image() {
+	xCoord_ = 0;
+	yCoord_ = 0;
+}
+
 void Image::lighten() {
 	unsigned int image_width = width();
 	unsigned int image_height = height();
@@ -196,4 +201,17 @@ void Image::scale(unsigned x, unsigned y) {
 	}
 	
 	delete copyImage;
+}
+
+void Image::setCoords(unsigned x, unsigned y) {
+	xCoord_ = x;
+	yCoord_ = y;
+}
+
+unsigned Image::getX() {
+	return xCoord_;
+}
+
+unsigned Image::getY() {
+	return yCoord_;
 }

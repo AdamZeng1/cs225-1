@@ -14,6 +14,8 @@ using namespace cs225;
 class Image : public PNG {
 
 	public:
+		Image();
+
 		void lighten();
 		void lighten(double amount);
 		void darken();
@@ -28,6 +30,11 @@ class Image : public PNG {
 		void illinify();
 		void scale(double factor);
 		void scale(unsigned x, unsigned y);
+		void setCoords(unsigned x, unsigned y);
+		unsigned getX();
+		unsigned getY();
 	
 	private:
+		unsigned xCoord_;
+		unsigned yCoord_;
 };
