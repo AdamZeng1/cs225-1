@@ -5,6 +5,7 @@
 #pragma once
 
 #include "Image.h"
+#include <vector>
 
 class StickerSheet {
 	public:
@@ -18,11 +19,13 @@ class StickerSheet {
 		void removeSticker(unsigned index);
 		Image * getSticker(unsigned index) const;
 		Image render () const;
-		unsigned getMax();
 	private:
 		unsigned max_;
+		Image * base;
 		Image ** Images;
+		unsigned * XCoords;
+		unsigned * YCoords;
+		unsigned num_stickers_;
 		void copy_(const StickerSheet & other);
 		void clear_();
-
 };

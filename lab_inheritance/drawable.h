@@ -17,7 +17,7 @@ using namespace cs225;
 class Drawable
 {
   public:
-    ~Drawable()
+    virtual ~Drawable()
     { /* Nothing */
     }
 

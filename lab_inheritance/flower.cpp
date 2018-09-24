@@ -34,7 +34,7 @@ Flower::Flower(const Vector2& center)
 {
     const Vector2 stem_center(center.x(), center.y() + STEM_HEIGHT / 2);
     stem = new Rectangle(stem_center, STEM_COLOR, STEM_WIDTH, STEM_HEIGHT);
-    
+
     pistil = new Circle(Vector2(center.x(), center.y() - PISTIL_RADIUS / 2),
                      PISTIL_COLOR, PISTIL_RADIUS);
 
@@ -67,7 +67,11 @@ void Flower::drawPetals(PNG* canvas, const Vector2& center, int x, int y) const
     petal.set_center(Vector2(center.x() - y, center.y() - x));
     petal.draw(canvas);
 }
-
+Flower::~Flower(){
+  delete stem;
+  delete pistil;
+  delete leaf;
+}
 void Flower::draw(PNG* canvas) const
 {
     stem->draw(canvas);

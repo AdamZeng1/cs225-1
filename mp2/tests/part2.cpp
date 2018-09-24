@@ -4,19 +4,17 @@
 #include "../cs225/PNG.h"
 #include "../cs225/HSLAPixel.h"
 #include "../StickerSheet.h"
+#include <iostream>
 
 using namespace cs225;
 
 TEST_CASE("A basic StickerSheet works", "[weight=5][part=2]") {
   Image alma; alma.readFromFile("tests/alma.png");
   Image i;    i.readFromFile("tests/i.png");
-
   StickerSheet sheet(alma, 5);
   sheet.addSticker(i, 20, 200);
-
   Image expected;
   expected.readFromFile("tests/expected.png");
-
   REQUIRE( sheet.render() == expected );
 }
 
@@ -24,7 +22,6 @@ TEST_CASE("A basic StickerSheet works", "[weight=5][part=2]") {
 TEST_CASE("StickerSheet::changeMaxStickers() does not discard stickers when resized larger", "[weight=1][part=2]") {
   Image alma; alma.readFromFile("tests/alma.png");
   Image i;    i.readFromFile("tests/i.png");
-
   StickerSheet sheet(alma, 5);
   sheet.addSticker(i, 20, 200);
 
@@ -80,7 +77,6 @@ TEST_CASE("StickerSheet::changeMaxStickers() discards stickers beyond the end of
 
   REQUIRE( sheet.render() == expected );
 }
-
 
 
 //
