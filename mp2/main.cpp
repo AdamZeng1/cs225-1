@@ -4,17 +4,23 @@
 
 int main() {
 
-  Image alma;
-  alma.readFromFile("alma.png");
+  Image pug;
+  pug.readFromFile("pug.png");
 
-  Image eye;
-  eye.readFromFile("i.png");
+  Image me;
+  me.readFromFile("metext.png");
+  Image valgrind;
+  valgrind.readFromFile("valgrind.png");
+  Image csicon;
+  csicon.readFromFile("cs225.png");
 
-  StickerSheet final(alma,2);
-  final.addSticker(eye, 50, 50);
+  StickerSheet meme(pug, 3);
+  meme.addSticker(me, 700, 350);
+  meme.addSticker(valgrind, 25, 350);
+  meme.addSticker(csicon, 25, 25);
 
-  Image pic = final.render();
-  pic.writeToFile("wow.png");
+  Image pic = meme.render();
+  pic.writeToFile("myImage.png");
 
   return 0;
 }
