@@ -3,6 +3,9 @@
  * This is where you will implement the required functions for the
  *  stacks and queues portion of the lab.
  */
+#include <iostream>
+using namespace std;
+
 
 namespace QuackFun {
 
@@ -22,12 +25,19 @@ namespace QuackFun {
  *  built. Try searching for "stl stack" to learn how to use it.
  * @hint Think recursively!
  */
+
+
 template <typename T>
 T sum(stack<T>& s)
 {
-
     // Your code here
-    return T(); // stub return value (0 for primitive types). Change this!
+    if (s.size() == 0) { return 0; }
+    T cur_num = s.top();
+    s.pop();
+    T count = cur_num + sum(s);
+    s.push(cur_num);
+    return count;
+                 // stub return value (0 for primitive types). Change this!
                 // Note: T() is the default value for objects, and 0 for
                 // primitive types
 }
@@ -51,8 +61,27 @@ T sum(stack<T>& s)
  */
 bool isBalanced(queue<char> input)
 {
+    // @TODO: Make less optimistic(
+    if (input.size() == 0) { return true; }
+    stack<char> s;
 
-    // @TODO: Make less optimistic
+    for (unsigned i = 0; i < input.size(); i++) {
+        if (input.front() == '[') {
+            s.push('[');
+        }
+        if (input.front() == ']') {
+            if (s.size() == 0) { return false; }
+            if (s.top() == '[') {
+                s.pop();
+            }
+            else {
+                return false;
+            }
+        }
+        input.push(input.front());
+        input.pop();
+    }
+    if (s.size() != 0) { return false; }
     return true;
 }
 
@@ -71,10 +100,34 @@ bool isBalanced(queue<char> input)
 template <typename T>
 void scramble(queue<T>& q)
 {
-    stack<T> s;
     // optional: queue<T> q2;
 
     // Your code here
+    queue<T> q2;
+    stack<T> s;
+    unsigned counter = 1;
+    while (!(q.empty())) {
+        if (counter % 2 == 0) {
+            if (q.size() < counter) { counter = q.size(); }
+            for (unsigned i = 0; i < counter; i++) {
+                s.push(q.front());
+                q.pop();
+            }
+            for (unsigned i = 0; i < counter; i++) {
+                q2.push(s.top());
+                s.pop();
+            }
+        }
+        else {
+            if (q.size() < counter) { counter = q.size(); }
+            for (unsigned i = 0; i < counter; i++) {
+                q2.push(q.front());
+                q.pop();
+            }
+        }
+        counter++;
+    }
+    q = q2;
 }
 
 /**
@@ -95,13 +148,17 @@ void scramble(queue<T>& q)
 template <typename T>
 bool verifySame(stack<T>& s, queue<T>& q)
 {
-    bool retval = true; // optional
-    // T temp1; // rename me
-    // T temp2; // rename :)
-
-    // Your code here
-
-    return retval;
+    T queuefront;
+    T stacktop;
+    bool retval = false;
+    if (s.empty()) { return true; }
+    stacktop = s.top();
+    s.pop();
+    retval = verifySame(s, q);
+    queuefront = q.front();
+    q.pop();
+    q.push(queuefront);
+    s.push(stacktop);
+    return (stacktop == queuefront) && retval;
 }
-
 }

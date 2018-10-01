@@ -50,6 +50,10 @@ void List<T>::_destroy() {
 template <typename T>
 void List<T>::insertFront(T const & ndata) {
   /// @todo Graded in MP3.1
+	ListNode * newFront = new ListNode(ndata);
+	newFront->next = head_;
+	newFront->prev = NULL;
+	head_->prev = newFront;
 }
 
 /**
