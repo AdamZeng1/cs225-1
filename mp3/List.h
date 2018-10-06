@@ -48,7 +48,7 @@ class List {
         ListNode* next;
 
         /**
-         * A pointer to the previous node in the list. May be NULL if
+         * A pointer to the previous node in the list. May be NULL if./test "List::reverse"
          * one does not exist.
          */
         ListNode* prev;

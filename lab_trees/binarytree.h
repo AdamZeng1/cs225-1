@@ -115,7 +115,7 @@ class BinaryTree
          *  (not creating a flipped copy).
          */
         void mirror();
-
+        void mirror(Node * subRoot);
         /**
          * isOrdered() function iterative version
          * @return True if an in-order traversal of the tree would produce a
