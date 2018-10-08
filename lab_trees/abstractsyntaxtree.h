@@ -29,6 +29,7 @@ class AbstractSyntaxTree
          * Calculates the value from an AST (Abstract Syntax Tree).
          */
         double eval() const;
+        double eval(typename BinaryTree<std::string>::Node* root) const;
     private:
         // You may add any helper functions you like.....
 };

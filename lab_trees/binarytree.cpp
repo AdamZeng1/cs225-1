@@ -103,8 +103,20 @@ void BinaryTree<T>::mirror(Node * subRoot)
 template <typename T>
 bool BinaryTree<T>::isOrderedIterative() const
 {
-    // your code here
-    return false;
+    InorderTraversal<int> travis(root);
+    int previous;
+    for (TreeTraversal<int>::Iterator iter = travis.begin(); iter != travis.end(); ++iter) {
+        if ((*iter)->elem == (*travis.begin())->elem) {
+            previous = (*iter)->elem;
+            continue;
+        }
+        if((*iter)->elem > previous) {
+            previous = (*iter)->elem;
+            continue;
+        }
+        else {return false;}
+    }
+    return true;
 }
 
 /**
@@ -116,8 +128,49 @@ bool BinaryTree<T>::isOrderedIterative() const
 template <typename T>
 bool BinaryTree<T>::isOrderedRecursive() const
 {
-    // your code here
-    return false;
+    return isOrderedRecursive(root);
+}
+
+template <typename T>
+typename BinaryTree<T>::Node* BinaryTree<T>::mostLeft(typename BinaryTree<T>::Node *subRoot) const{
+    if (subRoot == NULL){
+        return NULL;
+    }
+    if (subRoot->left == NULL){
+        return subRoot;
+    }
+    return mostLeft(subRoot->left);
+}
+
+template <typename T>
+typename BinaryTree<T>::Node* BinaryTree<T>::mostRight(typename BinaryTree<T>::Node *subRoot) const{
+    if (subRoot == NULL){
+        return NULL;
+    }
+    if (subRoot->right == NULL){
+        return subRoot;
+    }
+    return mostRight(subRoot->right);
+}
+
+template <typename T>
+bool BinaryTree<T>::isOrderedRecursive(const Node *subRoot) const{
+    if (subRoot == NULL)
+        return true;
+    if (subRoot->left != NULL){
+        if (mostLeft(subRoot->left)->elem > subRoot->elem){
+            return false;
+        }
+    }
+    if (subRoot->right != NULL){
+        if (mostRight(subRoot->right)->elem < subRoot->elem){
+            return false;
+        }
+    }
+    if (!isOrderedRecursive(subRoot->left) || !isOrderedRecursive(subRoot->right)){
+        return false;
+    }
+    return true;
 }
 
 
@@ -132,7 +185,24 @@ bool BinaryTree<T>::isOrderedRecursive() const
 template <typename T>
 void BinaryTree<T>::getPaths(vector<vector<T> > &paths) const
 {
-    // your code here
+    paths.resize(1);
+    getPaths(paths, root);
+    paths.pop_back();
+}
+template <typename T>
+void BinaryTree<T>::getPaths(vector<vector<T>> &paths, Node* current) const {
+    if (current->left == NULL && current->right == NULL) {
+        paths.back().push_back(current->elem);
+        vector<T> next = paths.back();
+        next.pop_back();
+        paths.push_back(next);
+    }
+    else {
+        paths.back().push_back(current->elem);
+        if (current->left != NULL) {getPaths(paths, current->left);}
+        if (current->right != NULL) {getPaths(paths, current->right);}
+        paths.back().pop_back();
+    }
 }
 
 

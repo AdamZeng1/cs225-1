@@ -131,6 +131,9 @@ class BinaryTree
          *  criterion for a binary tree to be a binary search tree.
          */
         bool isOrderedRecursive() const;
+        bool isOrderedRecursive(const Node *subRoot) const;
+        Node * mostLeft(typename BinaryTree<T>::Node *subRoot) const;
+        Node * mostRight(typename BinaryTree<T>::Node *subRoot) const;
 
 
         /**
@@ -142,6 +145,7 @@ class BinaryTree
          * @param paths vector of vectors that contains path of nodes
          */
         void getPaths(vector<vector<T> > &paths) const;
+        void getPaths(vector<vector<T>> &paths, Node* current) const;
 
         /**
          * Each node in a tree has a distance from the root node - the depth of that
