@@ -105,23 +105,6 @@ void HuffmanTree::buildTree(const vector<Frequency>& frequencies)
     queue<TreeNode*> singleQueue; // Queue containing the leaf nodes
     queue<TreeNode*> mergeQueue;  // Queue containing the inner nodes
 
-    /**
-     * @todo Your code here!
-     *
-     * First, place all of the leaf nodes into the singleQueue in
-     * increasing order of frequency. Note: frequencies is already sorted
-     * for you.
-     *
-     * Next, until there is only one node on the two queues (that is, one
-     * of the queues is empty and one has a single node), remove the two
-     * smallest entries from the two queues. Then, create a new internal
-     * node with these nodes as children, whose frequency is the sum of
-     * these two children's frequencies. Place the new internal node onto
-     * the back of the mergeQueue.
-     *
-     * Finally, when there is a single node left, it is the root. Assign it
-     * to the root and you're done!
-     */
     for (unsigned i = 0; i < frequencies.size(); i++) {
     	TreeNode * new_node = new TreeNode(frequencies[i]);
     	singleQueue.push(new_node);
@@ -151,17 +134,6 @@ void HuffmanTree::decode(stringstream& ss, BinaryFileReader& bfile)
     TreeNode* current = root_;
     bool cur_bit;
     while (bfile.hasBits()) {
-        /**
-         * @todo Your code here!
-         *
-         * This code is reading in all of the bits in the binary file
-         * given. After reading a bit, we go left if the bit was a 0 (or
-         * false), and we go right if the bit was a 1 (or true).
-         *
-         * Special case: if we are at a leaf node, we should "print" its
-         * character to the stringstream (with operator<<, just like cout)
-         * and start traversing from the root node again.
-         */
     	cur_bit = bfile.getNextBit();
     	if (cur_bit) {current = current->right;}
     	else {current = current->left;}
@@ -180,21 +152,6 @@ void HuffmanTree::writeTree(BinaryFileWriter& bfile)
 
 void HuffmanTree::writeTree(TreeNode* current, BinaryFileWriter& bfile)
 {
-    /**
-     * @todo Your code here!
-     *
-     * This code is writing the current HuffmanTree in a compressed format
-     * to the given BinaryFileWriter. The strategy for doing so is as
-     * follows:
-     *      1. If we are a leaf node, write the bit "1" followed by the
-     *         byte that is the character of this node.
-     *      2. If we are an internal node, writ the bit "0", and then
-     *         encode the left and right subtree, recursively.
-     *
-     * Note that we don't encode the frequencies in this compressed
-     * version: this is fine, as the structure of the tree still reflects
-     * what the relative frequencies were.
-     */
 	if (current->left == NULL && current->right == NULL) {
 		bfile.writeBit(true);
 		bfile.writeByte(current->freq.getCharacter());
@@ -208,22 +165,6 @@ void HuffmanTree::writeTree(TreeNode* current, BinaryFileWriter& bfile)
 
 HuffmanTree::TreeNode* HuffmanTree::readTree(BinaryFileReader& bfile)
 {
-    /**
-     * @todo Your code here!
-     *
-     * This code is reading a HuffanTree in from a file in the format that
-     * we wrote it above. The strategy, then, is as follows:
-     *      1. If the file has no more bits, we're done.
-     *      2. If we read a 1 bit, we are a leaf node: create a new
-     *         TreeNode with the character that is the next byte in the
-     *         file (its frequency should be 0, since we are ignoring
-     *         frequency data now).
-     *      3. If we read a 0 bit, create a new internal node (with
-     *         frequency 0, since we are ignoring them now, and set its left
-     *         child and right children to be the subtrees built recursively.
-     *      4. Your function should return the TreeNode it creates, or NULL
-     *         if it did not create one.
-     */
 	TreeNode * new_node;
 	if (!bfile.hasBits()) {
 		return NULL;
