@@ -14,6 +14,7 @@
 
 #include "ImageTraversal.h"
 
+using namespace std;
 using namespace cs225;
 
 /**
@@ -22,17 +23,19 @@ using namespace cs225;
  */
 class DFS : public ImageTraversal {
 public:
-  DFS(const PNG & png, const Point & start, double tolerance);
+  	DFS(const PNG & png, const Point & start, double tolerance);
   
-  ImageTraversal::Iterator begin();
-  ImageTraversal::Iterator end();
+  	ImageTraversal::Iterator begin();
+  	ImageTraversal::Iterator end();
 
-  void add(const Point & point);
-  Point pop();
-  Point peek() const;
-  bool empty() const;
+  	void add(const Point & point);
+  	Point pop();
+  	Point peek() const;
+  	bool empty() const;
 
 private:
-	/** @todo [Part 1] */
-	/** add private members here*/
+	double tolerance_;
+	PNG png_;
+	Point start_;
+	stack<Point> traversal;
 };

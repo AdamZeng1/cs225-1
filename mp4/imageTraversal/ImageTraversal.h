@@ -28,18 +28,21 @@ public:
    */
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
-    Iterator();
+    	Iterator();
 
-    Iterator & operator++();
-    Point operator*();
-    bool operator!=(const Iterator &other);
+    	Iterator(ImageTraversal & traversal, Point start);
 
-    /** @todo [Part 1] */
-    /** add member functions if neccesary*/
+    	Iterator & operator++();
+    	Point operator*();
+    	bool operator!=(const Iterator &other);
+
+    	/** @todo [Part 1] */
+    	/** add member functions if neccesary*/
   
   private:
-    /** @todo [Part 1] */
-    /** add private members here if neccesary*/
+    	ImageTraversal * traversal;
+    	Point start;
+    	Point current;
 
   };  
 

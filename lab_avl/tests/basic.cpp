@@ -5,6 +5,7 @@
 #include <iostream>
 #include <sstream>
 #include <fstream>
+#include <iostream>
 
 using namespace std;
 
@@ -38,6 +39,7 @@ TEST_CASE("test_find", "[weight=10][valgrind]") {
     tree.insert("malloc", "new");
     tree.insert("bool", "void");
     tree.insert("Nico", "nii");
+    cout << "find bool: "<< tree.find("bool") << endl;
     REQUIRE(tree.find("C").compare("C++") == 0);
     REQUIRE(tree.find("free").compare("delete") == 0);
     REQUIRE(tree.find("malloc").compare("new") == 0);

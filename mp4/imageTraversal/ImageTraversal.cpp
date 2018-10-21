@@ -31,8 +31,13 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
 /**
  * Default iterator constructor.
  */
-ImageTraversal::Iterator::Iterator() {
-  /** @todo [Part 1] */
+ImageTraversal::Iterator::Iterator() : traversal(NULL) {
+  // Nothing
+}
+
+ImageTraversal::Iterator::Iterator(ImageTraversal & traversal, Point start) 
+	:traversal(&traversal), start(start) {
+	current = traversal.peek();
 }
 
 /**
@@ -41,8 +46,12 @@ ImageTraversal::Iterator::Iterator() {
  * Advances the traversal of the image.
  */
 ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
-  /** @todo [Part 1] */
-  return *this;
+  	if (!traversal->empty()) {
+  		current = traversal->pop();
+  		traversal->add(current);
+  		current = traversal->peek();
+  	}
+  	return *this;
 }
 
 /**
@@ -51,8 +60,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
  * Accesses the current Point in the ImageTraversal.
  */
 Point ImageTraversal::Iterator::operator*() {
-  /** @todo [Part 1] */
-  return Point(0, 0);
+  	return current;
 }
 
 /**
@@ -61,7 +69,17 @@ Point ImageTraversal::Iterator::operator*() {
  * Determines if two iterators are not equal.
  */
 bool ImageTraversal::Iterator::operator!=(const ImageTraversal::Iterator &other) {
-  /** @todo [Part 1] */
-  return false;
+  	bool thisEmpty = false;
+  	bool otherEmpty = false;
+
+  	if (traversal == NULL) {thisEmpty = true;}
+  	if (other.traversal == NULL) {otherEmpty = true;}
+
+  	if (!thisEmpty) {thisEmpty = traversal->empty();}
+  	if (!otherEmpty) {otherEmpty = other.traversal->empty();}
+
+  	if (thisEmpty && otherEmpty) {return true;}
+  	else if ((!thisEmpty) && (!otherEmpty)) {return traversal != other.traversal;}
+  	else return true;
 }
 
