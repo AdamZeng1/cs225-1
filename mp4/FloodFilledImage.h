@@ -25,7 +25,6 @@ public:
   FloodFilledImage(const PNG & png);
   void addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker);
   Animation animate(unsigned frameInterval) const;
-  PNG getPNG();
 
 private:
 	PNG png_;

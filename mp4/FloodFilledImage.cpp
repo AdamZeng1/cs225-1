@@ -74,6 +74,3 @@ Animation FloodFilledImage::animate(unsigned frameInterval) const {
    return animation;
 }
 
-PNG FloodFilledImage::getPNG() {
-   return png_;
-}
