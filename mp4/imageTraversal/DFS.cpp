@@ -11,6 +11,7 @@
 #include "DFS.h"
 
 using namespace std;
+using namespace cs225;
 
 /**
  * Initializes a depth-first ImageTraversal on a given `png` image,
@@ -26,15 +27,15 @@ DFS::DFS(const PNG & png, const Point & start, double tolerance) {
 	png_ = png; 
 	start_ = start;
 	traversal.push(start);
-	/*
 	visited = new vector<vector<bool>>;
-	for (int i = 0; i < png_.width(); i++) {
-		for (int j = 0; j < png_.height(); j++) {
-			visited[i][j] = false; 
-		}
-	}
-	visited[start.x, start.y] = true;
-	*/
+    visited->resize(png_.width());
+    for (unsigned i = 0; i < visited->size(); i++) {
+        (*visited)[i].resize(png_.height());
+        for (unsigned j = 0; j < (*visited)[i].size(); j++) {
+            (*visited)[i][j] = false;
+        }
+    }
+    (*visited)[start.x][start.y] = true;
 }
 
 /**
@@ -80,4 +81,17 @@ Point DFS::peek() const {
  */
 bool DFS::empty() const {
   	return traversal.empty();
+}
+
+bool DFS::getVisited(unsigned x, unsigned y) {
+    return (*visited)[x][y];
+}
+void DFS::setVisit(unsigned x, unsigned y) {
+    (*visited)[x][y] = true;
+}
+PNG * DFS::passPng() {
+    return &png_;
+}
+double DFS::getTolerance() {
+  return tolerance_;
 }

@@ -35,14 +35,12 @@ public:
     	Iterator & operator++();
     	Point operator*();
     	bool operator!=(const Iterator &other);
-
-    	/** @todo [Part 1] */
-    	/** add member functions if neccesary*/
   
   private:
     	ImageTraversal * traversal;
     	Point start;
     	Point current;
+    	bool finished_flag;
 
   };  
 
@@ -78,6 +76,12 @@ public:
    * Virtual function. Derived class need to implement this
    */
   virtual bool empty() const = 0;
+
+  virtual bool getVisited(unsigned x, unsigned y) = 0;
+  virtual void setVisit(unsigned x, unsigned y) = 0;
+  virtual PNG * passPng() = 0;
+  virtual double getTolerance() = 0;
+
 
 private:
   static double calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2);  

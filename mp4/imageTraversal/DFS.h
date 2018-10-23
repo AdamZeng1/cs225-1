@@ -6,7 +6,6 @@
 
 #include <iterator>
 #include <cmath>
-#include <list>
 #include <stack>
 
 #include "../cs225/PNG.h"
@@ -32,9 +31,14 @@ public:
   	Point pop();
   	Point peek() const;
   	bool empty() const;
+  	bool getVisited(unsigned x, unsigned y);
+  	void setVisit(unsigned x, unsigned y);
+  	PNG * passPng();
+  	double getTolerance();
 
 private:
 	double tolerance_;
+	vector<vector<bool>> * visited;
 	PNG png_;
 	Point start_;
 	stack<Point> traversal;
