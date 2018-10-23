@@ -23,6 +23,7 @@ using namespace cs225;
 class BFS : public ImageTraversal {
 public:
   	BFS(const PNG & png, const Point & start, double tolerance);
+    ~BFS();
 
   	ImageTraversal::Iterator begin();
   	ImageTraversal::Iterator end();
@@ -37,9 +38,9 @@ public:
   	double getTolerance();
 
 private:
-  	double tolerance_;
-  	vector<vector<bool>> * visited;
-	PNG png_;
-	Point start_;
-	queue<Point> traversal;
+    double tolerance_;
+    vector<vector<bool>> visited;
+	  PNG png_;
+	  Point start_;
+	  queue<Point> traversal;
 };

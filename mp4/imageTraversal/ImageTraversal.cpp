@@ -8,6 +8,10 @@
 
 #include "ImageTraversal.h"
 
+ImageTraversal::~ImageTraversal() {
+	// Nothing
+}
+
 /**
  * Calculates a metric for the difference between two pixels, used to
  * calculate if a pixel is within a tolerance.
@@ -31,7 +35,7 @@ double ImageTraversal::calculateDelta(const HSLAPixel & p1, const HSLAPixel & p2
 /**
  * Default iterator constructor.
  */
-ImageTraversal::Iterator::Iterator() : finished_flag(true) {
+ImageTraversal::Iterator::Iterator() : traversal(), finished_flag(true) {
   // Nothing
 }
 
@@ -39,6 +43,12 @@ ImageTraversal::Iterator::Iterator(ImageTraversal & traversal, Point start)
 	:traversal(&traversal), start(start), finished_flag(false) {
 	current = traversal.peek();
 }
+
+ImageTraversal::Iterator::~Iterator() {
+	if (traversal != NULL) {delete traversal;}
+	traversal = NULL;
+}
+
 
 /**
  * Iterator increment opreator.
@@ -57,7 +67,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   	HSLAPixel & startingPixel = traversal->passPng()->getPixel(start.x, start.y);
 
   	// Right case
-  	if (right.x >= 0 && right.y >= 0 && right.x < traversal->passPng()->width() && right.y < traversal->passPng()->height() ) {
+  	if ( right.x < traversal->passPng()->width() ) {
   		HSLAPixel & pixelInQuestion = traversal->passPng()->getPixel(right.x, right.y);
   		double delta = calculateDelta(startingPixel, pixelInQuestion);
   		if (delta < traversal->getTolerance()) {
@@ -65,7 +75,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   		}
   	}
   	// Below case
-  	if (below.x >= 0 && below.y >= 0 && below.x < traversal->passPng()->width() && below.y < traversal->passPng()->height() ) {
+  	if ( below.y < traversal->passPng()->height() ) {
   		HSLAPixel & pixelInQuestion = traversal->passPng()->getPixel(below.x, below.y);
   		double delta = calculateDelta(startingPixel, pixelInQuestion);
   		if (delta < traversal->getTolerance()) {
@@ -73,7 +83,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   		}
   	}
   	// Left case
-  	if (lefft.x >= 0 && lefft.y >= 0 && lefft.x < traversal->passPng()->width() && lefft.y < traversal->passPng()->height() ) {
+  	if ( lefft.x < traversal->passPng()->width() ) {
   		HSLAPixel & pixelInQuestion = traversal->passPng()->getPixel(lefft.x, lefft.y);
   		double delta = calculateDelta(startingPixel, pixelInQuestion);
   		if (delta < traversal->getTolerance()) {
@@ -81,7 +91,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   		}
   	}
   	// Above case
-  	if (above.x >= 0 && above.y >= 0 && above.x < traversal->passPng()->width() && above.y < traversal->passPng()->height() ) {
+  	if ( above.y < traversal->passPng()->height() ) {
   		HSLAPixel & pixelInQuestion = traversal->passPng()->getPixel(above.x, above.y);
   		double delta = calculateDelta(startingPixel, pixelInQuestion);
   		if (delta < traversal->getTolerance()) {
@@ -93,6 +103,7 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   	}
   	if (traversal->empty()) {
   		finished_flag = true;
+  		//delete traversal;
   		return *this;
   	}
   	current = traversal->peek();

@@ -26,15 +26,19 @@ BFS::BFS(const PNG & png, const Point & start, double tolerance) {
     png_ = png; 
     start_ = start;
     traversal.push(start);
-    visited = new vector<vector<bool>>;
-    visited->resize(png_.width());
-    for (unsigned i = 0; i < visited->size(); i++) {
-        (*visited)[i].resize(png_.height());
-        for (unsigned j = 0; j < (*visited)[i].size(); j++) {
-            (*visited)[i][j] = false;
+    //visited = vector<vector<bool>>;
+    visited.resize(png_.width());
+    for (unsigned i = 0; i < visited.size(); i++) {
+        visited[i].resize(png_.height());
+        for (unsigned j = 0; j < visited[i].size(); j++) {
+            visited[i][j] = false;
         }
     }
-    (*visited)[start.x][start.y] = true;
+    visited[start.x][start.y] = true;
+}
+
+BFS::~BFS() {
+    
 }
 
 /**
@@ -83,10 +87,10 @@ bool BFS::empty() const {
 }
 
 bool BFS::getVisited(unsigned x, unsigned y) {
-    return (*visited)[x][y];
+    return visited[x][y];
 }
 void BFS::setVisit(unsigned x, unsigned y) {
-    (*visited)[x][y] = true;
+    visited[x][y] = true;
 }
 PNG * BFS::passPng() {
     return &png_;
@@ -94,4 +98,3 @@ PNG * BFS::passPng() {
 double BFS::getTolerance() {
   return tolerance_;
 }
-

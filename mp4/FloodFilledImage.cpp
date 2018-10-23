@@ -1,6 +1,7 @@
 #include "cs225/PNG.h"
 #include <list>
 #include <iostream>
+#include <vector>
 
 #include "colorPicker/ColorPicker.h"
 #include "imageTraversal/ImageTraversal.h"
@@ -10,6 +11,7 @@
 #include "FloodFilledImage.h"
 
 using namespace cs225;
+using namespace std;
 
 /**
  * Constructs a new instance of a FloodFilledImage with a image `png`.
@@ -27,8 +29,8 @@ FloodFilledImage::FloodFilledImage(const PNG & png) : png_(png) {
  * @param colorPicker ColorPicker used for this FloodFill operation.
  */
 void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & colorPicker) {
-	traversal_ = &traversal;
-	cPicker_ = &colorPicker;
+   traversal_.push_back(&traversal);
+   cPicker_.push_back(&colorPicker);
 }
 
 /**
@@ -51,17 +53,27 @@ void FloodFilledImage::addFloodFill(ImageTraversal & traversal, ColorPicker & co
  *   - The final frame, after all pixels have been filed)
  */ 
 Animation FloodFilledImage::animate(unsigned frameInterval) const {
-  	Animation animation;
+   Animation animation;
 
-  	unsigned count = 0;
-  	for (const Point & p : (*traversal_)) {
-  		if (count % frameInterval == 0) {
-			animation.addFrame(png_);
-		}
-    	HSLAPixel & cur_pixel = png_.getPixel(p.x, p.y);
-		cur_pixel = cPicker_->getColor(p.x, p.y);
-  		count++;
-  	}
-  	animation.addFrame(png_);
-  	return animation;
+   for (unsigned index = 0; index < traversal_.size(); index++) {
+
+      ImageTraversal * cur_traversal = traversal_[index];
+      ColorPicker * cur_cPicker = cPicker_[index];
+
+      unsigned count = 0;
+      for (const Point & p : (*cur_traversal)) {
+         if (count % frameInterval == 0) {
+			      animation.addFrame(png_);
+		     }
+    	   HSLAPixel & cur_pixel = png_.getPixel(p.x, p.y);
+		     cur_pixel = cur_cPicker->getColor(p.x, p.y);
+  		   count++;
+      }
+      animation.addFrame(png_);
+   }
+   return animation;
+}
+
+PNG FloodFilledImage::getPNG() {
+   return png_;
 }

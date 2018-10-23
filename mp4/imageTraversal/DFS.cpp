@@ -23,19 +23,23 @@ using namespace cs225;
  * it will not be included in this DFS
  */
 DFS::DFS(const PNG & png, const Point & start, double tolerance) {
-	tolerance_ = tolerance; 
+  tolerance_ = tolerance; 
 	png_ = png; 
 	start_ = start;
 	traversal.push(start);
-	visited = new vector<vector<bool>>;
-    visited->resize(png_.width());
-    for (unsigned i = 0; i < visited->size(); i++) {
-        (*visited)[i].resize(png_.height());
-        for (unsigned j = 0; j < (*visited)[i].size(); j++) {
-            (*visited)[i][j] = false;
-        }
-    }
-    (*visited)[start.x][start.y] = true;
+	//visited = new vector<vector<bool>>;
+  visited.resize(png_.width());
+  for (unsigned i = 0; i < visited.size(); i++) {
+    visited[i].resize(png_.height());
+      for (unsigned j = 0; j < visited[i].size(); j++) {
+        visited[i][j] = false;
+      }
+  }
+  visited[start.x][start.y] = true;
+}
+
+DFS::~DFS() {
+    
 }
 
 /**
@@ -84,10 +88,10 @@ bool DFS::empty() const {
 }
 
 bool DFS::getVisited(unsigned x, unsigned y) {
-    return (*visited)[x][y];
+    return visited[x][y];
 }
 void DFS::setVisit(unsigned x, unsigned y) {
-    (*visited)[x][y] = true;
+    visited[x][y] = true;
 }
 PNG * DFS::passPng() {
     return &png_;

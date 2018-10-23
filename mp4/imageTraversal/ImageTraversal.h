@@ -29,8 +29,8 @@ public:
   class Iterator : std::iterator<std::forward_iterator_tag, Point> {
   public:
     	Iterator();
-
     	Iterator(ImageTraversal & traversal, Point start);
+      ~Iterator();
 
     	Iterator & operator++();
     	Point operator*();
@@ -42,6 +42,8 @@ public:
     	Point current;
     	bool finished_flag;
   };  
+
+  virtual ~ImageTraversal();
 
   /**
    * The begining of an iterator
