@@ -41,7 +41,6 @@ public:
     	Point start;
     	Point current;
     	bool finished_flag;
-
   };  
 
   /**

@@ -25,7 +25,7 @@ public:
   Animation animate(unsigned frameInterval) const;
 
 private:
-	/** @todo [Part 2] */
-	/** add private members here*/
-
+	PNG png_;
+	ImageTraversal * traversal_;
+	ColorPicker * cPicker_;
 };
