@@ -103,7 +103,6 @@ ImageTraversal::Iterator & ImageTraversal::Iterator::operator++() {
   	}
   	if (traversal->empty()) {
   		finished_flag = true;
-  		//delete traversal;
   		return *this;
   	}
   	current = traversal->peek();

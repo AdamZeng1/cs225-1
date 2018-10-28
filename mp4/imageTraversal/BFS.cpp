@@ -96,5 +96,5 @@ PNG * BFS::passPng() {
     return &png_;
 }
 double BFS::getTolerance() {
-  return tolerance_;
+    return tolerance_;
 }

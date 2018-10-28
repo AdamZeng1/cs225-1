@@ -8,6 +8,9 @@
 
 #include <algorithm>
 
+#include <iostream>
+using namespace std;
+
 using std::vector;
 
 /**
@@ -89,6 +92,7 @@ bool BTree<K, V>::is_valid(const BTreeNode* subroot, vector<DataPair>& data,
                            unsigned int order) const
 {
     if (subroot->elements.size() >= order) {
+        cout << "case1 false flag" << endl;
         return false;
     }
 

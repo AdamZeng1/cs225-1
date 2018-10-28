@@ -1,5 +1,6 @@
 #include <cstring>
 #include <stdexcept>
+#include <iostream>
 
 #include "btree.h"
 
