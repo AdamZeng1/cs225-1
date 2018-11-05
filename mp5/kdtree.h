@@ -152,7 +152,6 @@ class KDTree
      */
     KDTree(const vector<Point<Dim>>& newPoints);
 
-
     /**
      * Copy constructor for KDTree.
      *
@@ -256,9 +255,9 @@ class KDTree
     void printTree(KDTreeNode * subroot, std::vector<std::string>& output,
                    int left, int top, int width, int currd) const;
 
-    /**
-     * @todo Add your helper functions here.
-     */
+    KDTreeNode * helper(const vector<Point<Dim>>& newPoints, int dimension, int startidx, int endidx); 
+    Point<Dim> quickSelect(const vector<Point<Dim>>& newPoints, int k, int dimension, int startidx, int endidx);
+    int partition(const vector<Point<Dim>>& newPoints, int dimension, int start, int end);
 };
 
 #include "kdtree.hpp"

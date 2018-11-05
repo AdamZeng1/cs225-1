@@ -9,9 +9,12 @@
 
 #include "schashtable.h"
  
+#include <iostream>
+
 using hashes::hash;
 using std::list;
 using std::pair;
+using std::vector;
   
 template <class K, class V>
 SCHashTable<K, V>::SCHashTable(size_t tsize)
@@ -57,34 +60,37 @@ SCHashTable<K, V>::SCHashTable(SCHashTable<K, V> const& other)
 template <class K, class V>
 void SCHashTable<K, V>::insert(K const& key, V const& value)
 {
-
-    /**
-     * @todo Implement this function.
-     *
-     */
+    unsigned int cur_hash = hash(key, size);
+    table[cur_hash].push_front(pair<K, V>(key, value));
+    elems++;
+    if (shouldResize()) resizeTable();
 }
 
 template <class K, class V>
 void SCHashTable<K, V>::remove(K const& key)
 {
-    typename list<pair<K, V>>::iterator it;
-    /**
-     * @todo Implement this function.
-     *
-     * Please read the note in the lab spec about list iterators and the
-     * erase() function on std::list!
-     */
-    (void) key; // prevent warnings... When you implement this function, remove this line.
+    unsigned int cur_hash = hash(key, size);
+    if (table[cur_hash].empty()) return;
+    typename list<pair<K, V>>::iterator it = table[cur_hash].begin();
+    while (it != table[cur_hash].end()) {
+        if ((*it).first == key) {
+            table[cur_hash].erase(it);
+            elems--;
+            break;
+        }
+        it++;
+    }
 }
 
 template <class K, class V>
 V SCHashTable<K, V>::find(K const& key) const
 {
-
-    /**
-     * @todo: Implement this function.
-     */
-
+    unsigned int cur_hash = hash(key, size);
+    typename list<pair<K, V>>::iterator it = table[cur_hash].begin();
+    while (it != table[cur_hash].end()) {
+        if ((*it).first == key) return (*it).second;
+        it++;
+    }
     return V();
 }
 
@@ -133,13 +139,16 @@ void SCHashTable<K, V>::clear()
 template <class K, class V>
 void SCHashTable<K, V>::resizeTable()
 {
-    typename list<pair<K, V>>::iterator it;
-    /**
-     * @todo Implement this function.
-     *
-     * Please read the note in the spec about list iterators!
-     * The size of the table should be the closest prime to size * 2.
-     *
-     * @hint Use findPrime()!
-     */
+    size_t new_size = findPrime(size * 2);
+
+    list<pair<K, V>>* new_table = new list<pair<K, V>>[new_size];
+
+    for (auto iter = begin(); iter != end(); iter++) {
+        unsigned cur_hash = hash(iter->first, new_size);
+        pair<K, V> temp(iter->first, iter->second); 
+        new_table[cur_hash].push_front(temp);
+    } 
+    delete[] table;
+    table = new_table;
+    size = new_size;
 }

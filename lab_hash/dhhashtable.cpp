@@ -80,33 +80,46 @@ void DHHashTable<K, V>::copy(const DHHashTable<K, V>& other)
 template <class K, class V>
 void DHHashTable<K, V>::insert(K const& key, V const& value)
 {
-
-    /**
-     * @todo Implement this function.
-     *
-     * @note Remember to resize the table when necessary (load factor >=
-     *  0.7). **Do this check *after* increasing elems!!** Also, don't
-     *  forget to mark the cell for probing with should_probe!
-     */
-
-    (void) key;   // prevent warnings... When you implement this function, remove this line.
-    (void) value; // prevent warnings... When you implement this function, remove this line.
+    unsigned int cur_hash = hash(key, size);
+    unsigned int jump = secondary_hash(key, size);
+    while (table[cur_hash] != NULL) {
+        cur_hash = (cur_hash + jump) % size;
+    }
+    table[cur_hash] = new pair<K, V>(key, value);
+    should_probe[cur_hash] = true;
+    elems++;
+    if (shouldResize()) resizeTable();
 }
 
 template <class K, class V>
 void DHHashTable<K, V>::remove(K const& key)
 {
-    /**
-     * @todo Implement this function
-     */
+    unsigned int cur_hash = hash(key, size);
+    unsigned int jump = secondary_hash(key, size);
+    while (table[cur_hash] != NULL && table[cur_hash]->first != key) {
+        cur_hash = (cur_hash + jump) % size;
+    }
+    if (table[cur_hash] == NULL) return;
+    else if (table[cur_hash]->first == key) {
+        delete table[cur_hash];
+        table[cur_hash] = NULL;
+        elems--;
+    }
 }
 
 template <class K, class V>
 int DHHashTable<K, V>::findIndex(const K& key) const
 {
-    /**
-     * @todo Implement this function
-     */
+    unsigned int cur_hash = hash(key, size);
+    unsigned int jump = secondary_hash(key, size);
+    unsigned int start = cur_hash;
+    while (should_probe[cur_hash]) {
+        if (table[cur_hash] != NULL) {
+            if (table[cur_hash]->first == key) return cur_hash;
+        }
+        cur_hash = (cur_hash + jump) % size;
+        if (start == cur_hash) break;
+    }
     return -1;
 }
 
