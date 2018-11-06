@@ -152,6 +152,7 @@ class KDTree
      */
     KDTree(const vector<Point<Dim>>& newPoints);
 
+
     /**
      * Copy constructor for KDTree.
      *
@@ -255,9 +256,38 @@ class KDTree
     void printTree(KDTreeNode * subroot, std::vector<std::string>& output,
                    int left, int top, int width, int currd) const;
 
-    KDTreeNode * helper(const vector<Point<Dim>>& newPoints, int dimension, int startidx, int endidx); 
-    Point<Dim> quickSelect(const vector<Point<Dim>>& newPoints, int k, int dimension, int startidx, int endidx);
-    int partition(const vector<Point<Dim>>& newPoints, int dimension, int start, int end);
+    /**
+     * @todo Add your helper functions here.
+     */
+     /*  This is the helper function for quick select.
+      *
+      */
+     unsigned quickSelect_position(vector<Point<Dim>>& list, int dimension, unsigned left, unsigned right, unsigned pivotIndex);
+
+     /*  This function implements the quickselect algorithm.
+      *
+      */
+     Point<Dim>& quickSelect(vector<Point<Dim>>& list, int dimension, unsigned left, unsigned right, unsigned k);
+
+     /*  This is the recursive helper function for the KDTree constructor.
+      *
+      *  In order to create a kdtree made of nodes that contain points
+      *  from a passed in vector, there is a base case to return a NULL
+      *  KDTreeNode pointer and three main steps happen in the recursive
+      *  step of the function...
+      *      1. a node is dynamically initiated using the point found at the
+      *          median index of the section of the vector defined by left and right
+      *      (the dimension is incremented in order for the next level of nodes)
+      *      2. the left child is assigned to the output of a recursive call
+      *          where the right index is set the the left of the median
+      *      3. the right child is assigned to the output of another recursive call
+      *          where the left index is set the the right of the median
+      */
+     KDTreeNode* ctorHelper(vector<Point<Dim>>& points_, int dimension, unsigned left, unsigned right);
+     Point<Dim> findNearestNeighbor(KDTreeNode * subroot, const Point<Dim>& query, int dimension) const;
+
+     void clear(KDTreeNode * subroot);
+     void copy(KDTreeNode * subroot, KDTreeNode * othersubroot);
 };
 
 #include "kdtree.hpp"
