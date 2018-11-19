@@ -14,6 +14,7 @@
 #include <iostream>
 #include <iterator>
 #include <algorithm>
+#include <utility>
 
 using std::string;
 using std::vector;
@@ -22,23 +23,20 @@ using std::cout;
 using std::endl;
 using std::feof;
 
-string remove_punct(const string& str)
-{
+string remove_punct(const string& str) {
     string ret;
     std::remove_copy_if(str.begin(), str.end(), std::back_inserter(ret),
                         std::ptr_fun<int, int>(&std::ispunct));
     return ret;
 }
 
-CommonWords::CommonWords(const vector<string>& filenames)
-{
+CommonWords::CommonWords(const vector<string>& filenames) {
     // initialize all member variables
     init_file_word_maps(filenames);
     init_common();
 }
 
-void CommonWords::init_file_word_maps(const vector<string>& filenames)
-{
+void CommonWords::init_file_word_maps(const vector<string>& filenames) {
     // make the length of file_word_maps the same as the length of filenames
     file_word_maps.resize(filenames.size());
 
@@ -47,13 +45,29 @@ void CommonWords::init_file_word_maps(const vector<string>& filenames)
         // get the corresponding vector of words that represents the current
         // file
         vector<string> words = file_to_vector(filenames[i]);
-        /* Your code goes here! */
+        for (auto word: words) {
+            file_word_maps[i][word]++;
+        }
     }
 }
 
-void CommonWords::init_common()
-{
-    /* Your code goes here! */
+void CommonWords::init_common() {
+    for (auto cur_map: file_word_maps) {
+        for (auto cur_elem: cur_map) {
+            map<string, unsigned int>::iterator help = common.find(cur_elem.first);
+            if (help != common.end())
+                common[cur_elem.first] += 1;
+            else 
+                common[cur_elem.first] = 1;
+        }
+    }
+    /*
+    for (auto cur_elem: common) {
+        if (cur_elem.second == 1) {
+            common.erase(cur_elem.first);
+        }
+    }
+    */
 }
 
 /**
@@ -64,7 +78,20 @@ void CommonWords::init_common()
 vector<string> CommonWords::get_common_words(unsigned int n) const
 {
     vector<string> out;
-    /* Your code goes here! */
+    for (auto elem: common) {
+        if (elem.second == file_word_maps.size()) {
+            bool should_add = true;
+            for (auto cur_map: file_word_maps) {
+                if (cur_map[elem.first] < n) {
+                    should_add = false;
+                    break;
+                }   
+            }
+            if (should_add) {
+                out.push_back(elem.first);
+            }
+        }
+    }
     return out;
 }
 

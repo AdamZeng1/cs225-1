@@ -97,7 +97,8 @@ unsigned long memoized_fac(unsigned long n)
     map<unsigned long, unsigned long>::iterator lookup = memo.find(n);
     if (lookup != memo.end()) {
         return lookup->second;
-    } else {
+    } 
+    else {
         unsigned long result = n * memoized_fac(n - 1);
         memo[n] = result;
         return result;

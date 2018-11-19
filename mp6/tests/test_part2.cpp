@@ -1,5 +1,4 @@
 
-/**
 #include "../cs225/catch/catch.hpp"
 #include <iostream>
 #include <fstream>
@@ -183,27 +182,26 @@ TEST_CASE("testMakeMazeRandom", "[weight=10][part2]")
 {
 	SquareMaze maze1;
 	maze1.makeMaze(50, 50);
-	PNG *p = maze1.drawMaze();
+	//PNG *p = maze1.drawMaze();
 	//sleep(2);
 	SquareMaze maze2;
 	maze2.makeMaze(50, 50);
-	p = maze2.drawMaze();
-  bool same = true;
+	//p = maze2.drawMaze();
+  	bool same = true;
 
-	for (int y = 0; y < 50; y++)
-	{
-		for (int x = 0; x < 50; x++)
-		{
-			if (maze1.canTravel(x, y, 0) != maze2.canTravel(x, y, 0)){
-        same = false;
+	for (int y = 0; y < 50; y++) {
+		for (int x = 0; x < 50; x++) {
+			if (maze1.canTravel(x, y, 0) != maze2.canTravel(x, y, 0)) {
+        		same = false;
 				break;
-      }
-			if (maze1.canTravel(x, y, 1) != maze2.canTravel(x, y, 1)){
-        same = false;
+      		}
+			if (maze1.canTravel(x, y, 1) != maze2.canTravel(x, y, 1)) {
+        		same = false;
 				break;
-      }
+      		}
 		}
 	}
+	//delete p;
 	if(same == false){
 		SUCCEED();
 	}
@@ -303,6 +301,7 @@ TEST_CASE("testDrawMazeSmall", "[weight=10][part2]")
 	PNG * actualOutput = maze.drawMaze();
 	actualOutput->writeToFile("testDrawMazeSmall"+ string(".png"));
 	REQUIRE(*actualOutput == solnImage);
+	delete actualOutput;
 }
 
 TEST_CASE("testDrawMazeMed", "[weight=10][part2]")
@@ -313,6 +312,7 @@ TEST_CASE("testDrawMazeMed", "[weight=10][part2]")
 	copyMaze(soln, &maze);
 	PNG * actualOutput = maze.drawMaze();
 	REQUIRE(*actualOutput == solnImage);
+	delete actualOutput;
 }
 
 TEST_CASE("testDrawMazeLarge", "[weight=10][part2]")
@@ -324,6 +324,7 @@ TEST_CASE("testDrawMazeLarge", "[weight=10][part2]")
 	PNG * actualOutput = maze.drawMaze();
 	actualOutput->writeToFile("testDrawMazeLarge" + string(".png"));
 	REQUIRE(*actualOutput == solnImage);
+	delete actualOutput;
 }
 
 TEST_CASE("testDrawSolutionMed", "[weight=10][part2]")
@@ -336,6 +337,7 @@ TEST_CASE("testDrawSolutionMed", "[weight=10][part2]")
 	PNG * actualOutput = maze.drawMazeWithSolution();
 	actualOutput->writeToFile("testDrawSolutionMed" + string(".png"));
 	REQUIRE(*actualOutput == solnImage);
+	delete actualOutput;
 }
 
 TEST_CASE("testDrawSolutionLarge", "[weight=10][part2]")
@@ -348,6 +350,7 @@ TEST_CASE("testDrawSolutionLarge", "[weight=10][part2]")
 	PNG * actualOutput = maze.drawMazeWithSolution();
 	actualOutput->writeToFile("testDrawSolutionLarge"+ string(".png"));
 	REQUIRE(*actualOutput == solnImage);
+	delete actualOutput;
 }
- */
+
 

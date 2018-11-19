@@ -29,8 +29,7 @@ using std::stringstream;
  * @param pronun_dict_filename Filename of the CMU pronunciation
  * dictionary.
  */
-PronounceDict::PronounceDict(const string& pronun_dict_filename)
-{
+PronounceDict::PronounceDict(const string& pronun_dict_filename) {
     ifstream pronun_dict_file(pronun_dict_filename);
     string line;
     if (pronun_dict_file.is_open()) {
@@ -72,8 +71,11 @@ PronounceDict::PronounceDict(const map<string, vector<string>>& pronun_dict)
  * one or both words weren't in the dictionary).
  * Note: The word keys in the dictionary are stored in uppercase.
  */
-bool PronounceDict::homophones(const string& word1, const string& word2) const
-{
-    /* Your code goes here! */
-    return true;
+bool PronounceDict::homophones(const string& word1, const string& word2) const {
+    string cword1 = std::transform(word1.begin(), word1.end(), word1.begin(), ::toupper);
+    string cword2 = std::transform(word2.begin(), word2.end(), word2.begin(), ::toupper);
+    std::vector<std::string>::iterator value1 = dict.find(cword1);
+    std::vector<std::string>::iterator value2 = dict.find(cword2);
+    if (value1 == dict.end() || value2 == dict.end()) return false;
+    return value1 == value2;
 }

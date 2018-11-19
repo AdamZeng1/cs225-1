@@ -19,10 +19,10 @@ using std::map;
  * @param n Which number to generate.
  * @return The nth Fibonacci number.
  */
-unsigned long fib(unsigned long n)
-{
-    /* Your code goes here! */
-    return 0;
+unsigned long fib(unsigned long n) {
+    if (n == 0) return 1;
+    else if (n == 1) return 1;
+    else return fib(n - 1) + fib(n - 2);
 }
 
 /**
@@ -31,8 +31,13 @@ unsigned long fib(unsigned long n)
  * @param n Which number to generate.
  * @return The nth Fibonacci number.
  */
-unsigned long memoized_fib(unsigned long n)
-{
-    /* Your code goes here! */
-    return 0;
+unsigned long memoized_fib(unsigned long n) {
+    static map<unsigned long, unsigned long> dict = {{0,1}, {1,1},};
+    map<unsigned long, unsigned long>::iterator iter = dict.find(n);
+    if (iter != dict.end()) return iter->second;
+    else {
+    	unsigned long result = memoized_fib(n - 1) + memoized_fib(n - 2);
+    	dict[n] = result;
+    	return result;
+    }
 }
