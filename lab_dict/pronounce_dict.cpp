@@ -72,10 +72,29 @@ PronounceDict::PronounceDict(const map<string, vector<string>>& pronun_dict)
  * Note: The word keys in the dictionary are stored in uppercase.
  */
 bool PronounceDict::homophones(const string& word1, const string& word2) const {
-    string cword1 = std::transform(word1.begin(), word1.end(), word1.begin(), ::toupper);
-    string cword2 = std::transform(word2.begin(), word2.end(), word2.begin(), ::toupper);
-    std::vector<std::string>::iterator value1 = dict.find(cword1);
-    std::vector<std::string>::iterator value2 = dict.find(cword2);
-    if (value1 == dict.end() || value2 == dict.end()) return false;
-    return value1 == value2;
+    string cword1 = word1;
+    string cword2 = word2;
+
+    for (auto & c1: cword1)
+        c1 = toupper(c1);
+    for (auto & c2: cword2)
+        c2 = toupper(c2);
+
+    auto iter1 = dict.find(cword1);
+    auto iter2 = dict.find(cword2);
+
+    if (iter1 == dict.end() || iter2 == dict.end()) return false;
+
+    vector<string> value1 = (*iter1).second;
+    vector<string> value2 = (*iter2).second;
+
+    if (value1.size() != value2.size()) return false;
+    
+    bool ret = true;
+    for (unsigned i = 0; i < value1.size(); i++) 
+        if (value1[i] != value2[i]) {
+            ret = false;
+            break;
+        }
+    return ret;
 }

@@ -10,28 +10,40 @@
 
 #include <algorithm> /* I wonder why this is included... */
 #include <fstream>
+#include <iostream>
 
 using std::string;
 using std::vector;
 using std::ifstream;
+using std::pair;
 
 /**
  * Constructs an AnagramDict from a filename with newline-separated
  * words.
  * @param filename The name of the word list file.
  */
-AnagramDict::AnagramDict(const string& filename)
-{
-    /* Your code goes here! */
+AnagramDict::AnagramDict(const string& filename) {
+    string line;
+    ifstream infile(filename);
+    if (infile.is_open()) {
+        while (getline(infile, line)) {
+        	string word = line;
+        	std::sort(word.begin(), word.end());
+        	dict[word].push_back(line);
+        }
+    }
 }
 
 /**
  * Constructs an AnagramDict from a vector of words.
  * @param words The vector of strings to be used as source words.
  */
-AnagramDict::AnagramDict(const vector<string>& words)
-{
-    /* Your code goes here! */
+AnagramDict::AnagramDict(const vector<string>& words) {
+    for (auto str: words) {
+    	string word = str;
+    	std::sort(word.begin(), word.end());
+    	dict[word].push_back(str);
+    }
 }
 
 /**
@@ -40,10 +52,14 @@ AnagramDict::AnagramDict(const vector<string>& words)
  * vector returned if no anagrams are found or the word is not in the
  * word list.
  */
-vector<string> AnagramDict::get_anagrams(const string& word) const
-{
-    /* Your code goes here! */
-    return vector<string>();
+vector<string> AnagramDict::get_anagrams(const string& word) const {
+    string str = word;
+    std::sort(str.begin(), str.end());
+    if (dict.find(str) == dict.end() || dict.at(str).size() == 1) {
+    	return vector<string>();
+    }
+    return dict.at(str);
+
 }
 
 /**
@@ -52,8 +68,9 @@ vector<string> AnagramDict::get_anagrams(const string& word) const
  * NOTE: It is impossible to have one of these vectors have less than
  * two elements, i.e. words with no anagrams are ommitted.
  */
-vector<vector<string>> AnagramDict::get_all_anagrams() const
-{
-    /* Your code goes here! */
-    return vector<vector<string>>();
+vector<vector<string>> AnagramDict::get_all_anagrams() const {
+    vector<vector<string>> ret;
+    for (auto vect: dict)
+    	ret.push_back(vect.second);
+    return ret;
 }
