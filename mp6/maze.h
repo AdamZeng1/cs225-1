@@ -16,7 +16,7 @@ public:
 	void makeMaze(int width, int height);
 	bool canTravel(int x, int y, int dir) const;
 	void setWall(int x, int y, int dir, bool exists);
-	std::vector<int> solveMaze();
+	vector<int> solveMaze();
 	void solveMazeHelper(vector<vector<pair<int, int>>> * solution, pair<unsigned, unsigned> start);
 	PNG * drawMaze() const;
 	PNG * drawMazeWithSolution();

@@ -61,13 +61,6 @@ void CommonWords::init_common() {
                 common[cur_elem.first] = 1;
         }
     }
-    /*
-    for (auto cur_elem: common) {
-        if (cur_elem.second == 1) {
-            common.erase(cur_elem.first);
-        }
-    }
-    */
 }
 
 /**
@@ -75,14 +68,14 @@ void CommonWords::init_common() {
  * @return A vector of strings. The vector contains all words that appear
  * in each file >= n times.
  */
-vector<string> CommonWords::get_common_words(unsigned int n) const
-{
+vector<string> CommonWords::get_common_words(unsigned int n) const {
     vector<string> out;
-    for (auto elem: common) {
+
+    for (auto & elem: common) {
         if (elem.second == file_word_maps.size()) {
             bool should_add = true;
-            for (auto cur_map: file_word_maps) {
-                if (cur_map[elem.first] < n) {
+            for (auto & cur_map: file_word_maps) {
+                if (cur_map.at(elem.first) < n) {
                     should_add = false;
                     break;
                 }   

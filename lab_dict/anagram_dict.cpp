@@ -71,6 +71,6 @@ vector<string> AnagramDict::get_anagrams(const string& word) const {
 vector<vector<string>> AnagramDict::get_all_anagrams() const {
     vector<vector<string>> ret;
     for (auto vect: dict)
-    	ret.push_back(vect.second);
+    	if (vect.second.size() > 1) ret.push_back(vect.second);
     return ret;
 }
