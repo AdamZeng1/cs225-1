@@ -5,12 +5,12 @@
 
 using namespace std;
 
-int main()
-{
+int main() {
     SquareMaze maze;
-    maze.makeMaze(1000, 1000);
-    PNG * maze_pic = maze.drawMazeWithSolution();
-    maze_pic->writeToFile("mymaze.png");
-    delete maze_pic;
+    maze.makeMaze(100, 100);
+    PNG * main_pic = maze.drawMazeCreative();
+    main_pic->writeToFile("creative.png");
+
+    delete main_pic;
     return 0;
 }
