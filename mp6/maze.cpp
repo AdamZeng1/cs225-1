@@ -284,7 +284,7 @@ PNG * SquareMaze::drawMazeWithSolution() {
 	return maze;
 }
 
-// These are my creative component functions :)
+// These are my creative component functions
 PNG * SquareMaze::drawMazeCreative() {
 	PNG * maze = drawMaze();
 
