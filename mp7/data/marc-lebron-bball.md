@@ -1,0 +1,1 @@
+Lebron finds himself entering a basketbacll court, fans cheering on every side. He is happy to have made it out alive.
