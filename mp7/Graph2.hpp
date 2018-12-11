@@ -1,7 +1,14 @@
+#include "Graph.h"
+#include "Edge.h"
+#include "Vertex.h"
+
 #include <queue>
 #include <algorithm>
 #include <string>
 #include <list>
+#include <iostream>
+
+using namespace std;
 
 /**
  * Returns an std::list of vertex keys that creates some shortest path between `start` and `end`.
@@ -16,10 +23,37 @@
  * @param end   The key for the ending vertex.
  */
 template <class V, class E>
-std::list<std::string> Graph<V,E>::shortestPath(const std::string start, const std::string end) {
-  std::list<std::string> path;
+list<string> Graph<V,E>::shortestPath(const string start, const string end) {
+	unordered_map<string, string> predecessor;
+	unordered_map<string, int> distances;
 
+	for (pair<string, V &> elem: vertexMap) {
+		distances.insert(pair<string, int>(elem.first, INT_MAX));
+		predecessor.insert(pair<string, string>(elem.first, ""));
+	}
 
-  return path;
+	queue<string> q;
+	q.push(start);
+	distances[start] = 0;
+
+	while (!q.empty()) {
+		string cur = q.front();
+		q.pop();
+		for (E_byRef ebr: incidentEdges(cur)) {
+			string cur_next = ebr.get().dest().key() == cur ? ebr.get().source().key() : ebr.get().dest().key();
+			if (distances[cur_next] > (distances[cur] + 1)) {
+				q.push(cur_next);
+				predecessor[cur_next] = cur;
+				distances[cur_next] = distances[cur] + 1;
+			}
+		}
+	}
+  	list<string> path;
+  	string cur = end;
+  	while (cur != "") {
+  		path.push_front(cur);
+  		cur = predecessor[cur];
+  	}
+  	return path;
 }
 
