@@ -24,18 +24,24 @@ using namespace std;
  */
 template <class V, class E>
 list<string> Graph<V,E>::shortestPath(const string start, const string end) {
+	// Used to keep track of every vertex's predecessor, so that a path list can be made
 	unordered_map<string, string> predecessor;
+	// Used to keep track of distances from start 
 	unordered_map<string, int> distances;
 
+	// For every pair in the vertexmap, initialize pair in predecessor and distances
 	for (pair<string, V &> elem: vertexMap) {
-		distances.insert(pair<string, int>(elem.first, INT_MAX));
 		predecessor.insert(pair<string, string>(elem.first, ""));
+		distances.insert(pair<string, int>(elem.first, INT_MAX));
 	}
 
+	// Set up a queue for BFS with only start vertex in it
 	queue<string> q;
 	q.push(start);
 	distances[start] = 0;
 
+	// While the queue isn't empty, check if there is new shorter path to any given node
+	// If so, push it to queue and update predecessor and distance
 	while (!q.empty()) {
 		string cur = q.front();
 		q.pop();
@@ -50,6 +56,7 @@ list<string> Graph<V,E>::shortestPath(const string start, const string end) {
 	}
   	list<string> path;
   	string cur = end;
+  	// Convert predecessor map to list
   	while (cur != "") {
   		path.push_front(cur);
   		cur = predecessor[cur];

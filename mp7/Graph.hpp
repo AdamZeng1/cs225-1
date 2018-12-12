@@ -46,21 +46,10 @@ V & Graph<V,E>::insertVertex(std::string key) {
 */
 template <class V, class E>
 void Graph<V,E>::removeVertex(const std::string & key) {
-	// Remove edges going to vertex
-	list<E_byRef> incidentEdges = incidentEdges(key);
-	for (E_byRef e: incidentEdges) {
-		if (e.get().dest() == key) {
-			for (typename list<edgeListIter>::iterator it = adjList.at(key).begin(); it != adjList.at(key).end(); it++) {
-				if ( (*it).get() == e ) {
-					adjList.at(e.get().source()).erase(it);
-					edgeList.erase(*it);
-				}
-			}
-		}
-	}
-	// Remove edges coming from vertex
-	for (edgeListIter eli: adjList.at(key)) {
-		edgeList.erase(eli);
+	// Remove all edges
+	list<E_byRef> incidentEdgeList = incidentEdges(key);
+	for (E_byRef ebr: incidentEdgeList) {
+		removeEdge(ebr.get().source(), ebr.get().dest());
 	}
 	// Remove vertex from map
 	vertexMap.erase(key);
@@ -77,21 +66,48 @@ void Graph<V,E>::removeVertex(const std::string & key) {
 */
 template <class V, class E>
 E & Graph<V,E>::insertEdge(const V & v1, const V & v2) {
-  E & e = *(new E(v1, v2));
-  edgeList.push_front(e);
-  adjList.at(v1.key()).push_front(edgeList.begin());
-  return e;
+  	E & e = *(new E(v1, v2));
+  	edgeList.push_front(e);
+  	// Add edge to v1's adjacency list
+  	adjList.at(v1.key()).push_front(edgeList.begin());
+  	// If edge is not directed then add it to v2's adjacency list as well
+  	if (!e.directed()) adjList.at(v2.key()).push_front(edgeList.begin());
+  	return e;
 }
 
 
 /**
 * Removes an Edge from the Graph
-* @param key1 The key of the ource Vertex
+* @param key1 The key of the source Vertex
 * @param key2 The key of the destination Vertex
 */
 template <class V, class E>
-void Graph<V,E>::removeEdge(const std::string key1, const std::string key2) {  
-  // TODO: Part 2
+void Graph<V,E>::removeEdge(const string key1, const string key2) {  
+	edgeListIter eli = edgeList.end();
+	bool directedFlag = false;
+	// Remove edge from v1's adjacency list
+	for (typename list<edgeListIter>::iterator it = adjList.at(key1).begin(); it != adjList.at(key1).end(); it++) {
+		E e = (*(*it)).get();
+		if ( e.source().key() == key1 && e.dest().key() == key2 ) {
+			adjList.at(key1).erase(it);
+			eli = *it;
+			break;
+		}
+		if (!directedFlag && e.directed()) directedFlag = true;
+	}
+	// Remove edge from v2's adjacency list if not directed
+	if (!directedFlag) {
+		for (typename list<edgeListIter>::iterator it = adjList.at(key2).begin(); it != adjList.at(key2).end(); it++) {
+			E e = (*(*it)).get();
+			if ( e.source().key() == key1 && e.dest().key() == key2 ) {
+				adjList.at(key2).erase(it);
+				eli = *it;
+				break;
+			}
+		}
+	}
+	// If edge list iterator was found, delete from edgeList
+	if (eli != edgeList.end()) edgeList.erase(eli);
 }
 
 
@@ -102,7 +118,25 @@ void Graph<V,E>::removeEdge(const std::string key1, const std::string key2) {
 */
 template <class V, class E>
 void Graph<V,E>::removeEdge(const edgeListIter & it) {
-  // TODO: Part 2
+	V vertex1 = (*it).get().source();
+	V vertex2 = (*it).get().dest();
+	bool directedFlag = false;
+	for (typename list<edgeListIter>::iterator it = adjList.at(vertex1.key()).begin(); it != adjList.at(vertex1.key()).end(); it++) {
+		if ( (*it) == it) {
+			adjList.at(vertex1.key()).erase(it);
+			break;
+		}
+		if (!directedFlag && (*it).get().directed()) directedFlag = true;
+	}
+	if (!directedFlag) {
+		for (typename list<edgeListIter>::iterator it = adjList.at(vertex2.key()).begin(); it != adjList.at(vertex2.key()).end(); it++) {
+			if ( (*it) == it) {
+				adjList.at(vertex2.key()).erase(it);
+				break;
+			}
+		}
+	}
+	edgeList.erase(it);
 }
 
 
@@ -113,10 +147,9 @@ void Graph<V,E>::removeEdge(const edgeListIter & it) {
 template <class V, class E>  
 const list<reference_wrapper<E>> Graph<V,E>::incidentEdges(const string key) const {
   	list<reference_wrapper<E>> edges;
-  	for (E_byRef e: edgeList) {
-  		if (e.get().source().key() == key || e.get().dest().key() == key) {
-  			edges.push_back(e);
-  		}
+  	// Basically return the adjacency list for vertex with given key
+  	for (edgeListIter eli: adjList.at(key)) {
+  		edges.push_back(*eli);
   	}
   	return edges;
 }
@@ -130,8 +163,11 @@ const list<reference_wrapper<E>> Graph<V,E>::incidentEdges(const string key) con
 */
 template <class V, class E>
 bool Graph<V,E>::isAdjacent(const string key1, const string key2) const {
+	// Iterate through adjacency list. Return true if find edge bewteen the vertices
 	for (edgeListIter eli: adjList.at(key1)) {
-		if ((*eli).get().dest().key() == key2) return true;
+		E cur_edge = (*eli).get();
+		if (cur_edge.source().key() == key2 || cur_edge.dest().key() == key2)
+		 	return true;
 	}
 	return false;
 }
